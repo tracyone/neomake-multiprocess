@@ -112,6 +112,9 @@ function! neomakemp#OnNeomakeFinished() abort
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
     else
         let g:asyncrun_status='All Done'
+        if g:neomake_hook_context.jobinfo.exit_code != 0
+            :copen
+        endif
     endif
 endfunction
 
