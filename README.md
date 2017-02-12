@@ -1,5 +1,7 @@
 # neomake-multiprocess
 
+**Under development**
+
 # Feature
 
 1. Run multiple process asynchronously.
@@ -53,6 +55,6 @@ function! s:AddCscopeOut(read_project,...)
         endif
     endif
 endfunction
-call neogrep#RunCommand('find ' .a:dir. ' -name "*.[chsS]" > '  . l:cscopefiles)
-call neogrep#RunCommand('cscope -Rbkq -i '.l:cscopefiles, function('<SID>AddCscopeOut'),[0,a:dir])
+call neomakemp#RunCommand('find ' .a:dir. ' -name "*.[chsS]" > '  . l:cscopefiles)
+call neomakemp#RunCommand('cscope -Rbkq -i '.l:cscopefiles, function('<SID>AddCscopeOut'),[0,a:dir])
 ```
