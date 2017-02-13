@@ -1,5 +1,7 @@
 # neomake-multiprocess
 
+A vim plugin for running multiple process asynchronously base on [neomake](https://github.com/neomake/neomake).
+
 # Feature
 
 1. Run multiple process asynchronously.
@@ -9,14 +11,21 @@
 
 # Usage
 
-Run `command`, function `callback` with its args in `arglist` will be called
-after `command` exit.`flag` specify whether open quickfix window after command exited.
+```vim
+neomakemp#RunCommand(command [, callback] [,arglist] [, flag)
+```
 
-    neomakemp#RunCommand (command [, callback] [,arglist] [, flag)
+Run `command` asynchronously.
 
-Global search charactor with `pattern`
+- `callback` is a `Funcref` variable which will be called after `command` exit.
+- `arglist` is a `list` variable which will be passed to `callback`
+- `flag` specify whether open quickfix window after command exited.
 
-    neomakemp#global_search(pattern)
+```vim
+neomakemp#global_search(pattern)
+```
+
+Global search charactor containing a match to the given PATTERN.
 
 Shortcut   | mode  | Description
 --------   | ----- | -----------
@@ -45,6 +54,12 @@ let g:neomakemp_grep_command = "ag"
 let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
 let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
 ```
+
+Quickfix window will be opened under following condition:
+
+1. Global search
+2. Some error happened
+3. `flag` is equal to 1
 
 # Example
 
