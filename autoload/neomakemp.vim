@@ -23,8 +23,20 @@ else
     finish
 endif
 
-let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
-let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
+if !exists('g:neomakemp_exclude_files')
+    let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
+elseif type(g:neomakemp_exclude_files) != v:t_list
+    echom "g:neomakemp_exclude_files must be a list variable"
+    finish
+endif
+
+if !exists('g:neomakemp_exclude_dirs')
+    let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
+elseif type(g:neomakemp_exclude_dirs) != v:t_list
+    echom "g:neomakemp_exclude_dirs must be a list variable"
+    finish
+endif
+
 
 
 function! neomakemp#entry_to_warning(entry) abort

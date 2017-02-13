@@ -1,20 +1,31 @@
 # neomake-multiprocess
 
-**Under development**
-
 # Feature
 
 1. Run multiple process asynchronously.
 2. Global search asynchronously, support ag and grep.
-3. Function only.
 
 # Screenshot
 
 # Usage
 
-```
-neomakemp#RunCommand(command [, callback] [, arglist])
-neomakemp#global_search(pattern)
+Run `command`, function `callback` with its args in `arglist` will be called
+after `command` exit.`flag` specify whether open quickfix window after command exited.
+
+    neomakemp#RunCommand (command [, callback] [,arglist] [, flag)
+
+Global search charactor with `pattern`
+
+    neomakemp#global_search(pattern)
+
+Shortcut   | mode  | Description
+--------   | ----- | -----------
+`<Leader>vv` | visual,normal| global search selected word or under current curosr
+
+you can remap it:
+
+```vim
+nmap <yourkey> <Plug>(NeomakempGlobalSearcher) 
 ```
 
 # Option
@@ -37,6 +48,8 @@ let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.
 
 # Example
 
+Following example showing how to generate cscope file asynchronously.
+
 ```vim
 function! s:AddCscopeOut(read_project,...)
     if a:read_project == 1
@@ -55,6 +68,6 @@ function! s:AddCscopeOut(read_project,...)
         endif
     endif
 endfunction
-call neomakemp#RunCommand('find ' .a:dir. ' -name "*.[chsS]" > '  . l:cscopefiles)
-call neomakemp#RunCommand('cscope -Rbkq -i '.l:cscopefiles, function('<SID>AddCscopeOut'),[0,a:dir])
+let l:gen_cscope_files='find ' .a:dir. ' -name "*.[chsS]" > '  . l:cscopefiles
+call neomakemp#RunCommand(l:gen_cscope_files.'&&cscope -Rbkq -i '.l:cscopefiles, function('<SID>AddCscopeOut'),[0,a:dir])
 ```
