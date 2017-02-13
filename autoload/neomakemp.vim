@@ -73,16 +73,15 @@ function! neomakemp#global_search(pattern) abort
     let l:job_info.jobid = neomake#Make(0, [g:neomakemp_grep_command])[0]
     let l:job_info.callback=''
     let l:job_info.args=[]
+    let l:job_info.flags=1
     if l:job_info.jobid != -1
+
         call add(g:neomakemp_job_list, l:job_info)
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
     endif
 endfunction
 
 function! neomakemp#OnNeomakeFinished() abort
-    if g:neomake_hook_context.jobinfo.maker.name ==# g:neomakemp_grep_command
-        :copen
-    endif
     let l:i = 0
 
     for needle in g:neomakemp_job_list
@@ -112,26 +111,33 @@ function! neomakemp#OnNeomakeFinished() abort
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
     else
         let g:asyncrun_status='All Done'
-        if g:neomake_hook_context.jobinfo.exit_code != 0
+        if g:neomake_hook_context.jobinfo.exit_code != 0 
+                    \ || needle.flags == 1
             :copen
         endif
     endif
 endfunction
 
 
-"neomakemp#RunCommand (command [, callback] [,arglist])
+"neomakemp#RunCommand (command [, callback] [,arglist] [, flag)
 function! neomakemp#RunCommand(command,...) abort
     let l:job_info={}
-    if a:0 == 1
-        let l:job_info.callback=a:1
-        let l:job_info.args=[]
-    elseif a:0 == 2
-        let l:job_info.callback=a:1
-        let l:job_info.args=a:2
-    else
-        let l:job_info.callback=''
-        let l:job_info.args=[]
-    endif
+    let l:job_info.callback=''
+    let l:job_info.args=[]
+    let l:job_info.flags=0
+    for s:needle in a:000
+        if type(s:needle) == v:t_func
+            let l:job_info.callback=s:needle
+        elseif type(s:needle) == v:t_list
+            let l:job_info.args=s:needle
+        elseif type(s:needle) == v:t_number
+            let l:job_info.flags=s:needle
+        else
+            echom 'Wrong argument'
+            return 0
+        endif 
+    endfor
+
     let l:job_info.jobid=neomake#Sh(a:command)
     if l:job_info.jobid != -1
         call add(g:neomakemp_job_list, l:job_info)
