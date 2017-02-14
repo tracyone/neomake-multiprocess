@@ -12,7 +12,7 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 # Usage
 
 ```vim
-neomakemp#RunCommand(command [, callback] [,arglist] [, flag)
+ neomakemp#run_command(command [, callback] [,arglist] [, flag)
 ```
 
 Run `command` asynchronously.
@@ -30,11 +30,13 @@ Global search charactor containing a match to the given PATTERN.
 Shortcut   | mode  | Description
 --------   | ----- | -----------
 `<Leader>vv` | visual,normal| global search selected word or under current curosr
+`<Leader>vr` | normal| run command from user input
 
 you can remap it:
 
 ```vim
-nmap <yourkey> <Plug>(NeomakempGlobalSearcher) 
+nmap <yourkey> <Plug>(neomakemp_global_search) 
+nmap <yourkey> <Plug>(neomakemp_run_command) 
 ```
 
 # Option

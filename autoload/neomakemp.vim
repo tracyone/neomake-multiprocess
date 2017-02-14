@@ -51,9 +51,9 @@ endfunction
 function! neomakemp#global_search(pattern) abort
     let g:asyncrun_status = ''
     if a:pattern =~# '^\s*$'
-        let neomake_searchq=input('Global Search: ')
+        let l:neomake_searchql=input('Global Search: ')
     else
-        let neomake_searchq=a:pattern
+        let l:neomake_searchql=a:pattern
     endif
     let args = [s:arg_init]
     let exfile=""
@@ -67,7 +67,7 @@ function! neomakemp#global_search(pattern) abort
         let args += [s:arg_exclude_dir.exdir]
     endfor
 
-    let args += [neomake_searchq]
+    let args += [l:neomake_searchql]
 
     let l:neomake_tmp_maker = {
         \ 'exec': g:neomakemp_grep_command,
@@ -93,7 +93,7 @@ function! neomakemp#global_search(pattern) abort
     endif
 endfunction
 
-function! neomakemp#OnNeomakeFinished() abort
+function! neomakemp#on_neomake_finished() abort
     let l:i = 0
 
     for needle in g:neomakemp_job_list
@@ -132,11 +132,16 @@ endfunction
 
 
 "neomakemp#RunCommand (command [, callback] [,arglist] [, flag)
-function! neomakemp#RunCommand(command,...) abort
+function! neomakemp#run_command(command,...) abort
     let l:job_info={}
     let l:job_info.callback=''
     let l:job_info.args=[]
     let l:job_info.flags=0
+    if a:command =~# '^\s*$'
+        let l:command=input('Run command: ')
+    else
+        let l:command=a:command
+    endif
     for s:needle in a:000
         if type(s:needle) == v:t_func
             let l:job_info.callback=s:needle
@@ -150,7 +155,7 @@ function! neomakemp#RunCommand(command,...) abort
         endif 
     endfor
 
-    let l:job_info.jobid=neomake#Sh(a:command)
+    let l:job_info.jobid=neomake#Sh(l:command)
     if l:job_info.jobid != -1
         call add(g:neomakemp_job_list, l:job_info)
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
@@ -159,5 +164,5 @@ endfunction
 
 augroup neomakemp
     au!
-    autocmd User NeomakeJobFinished call neomakemp#OnNeomakeFinished()
+    autocmd User NeomakeJobFinished call neomakemp#on_neomake_finished()
 augroup END
