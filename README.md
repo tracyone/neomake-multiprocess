@@ -41,11 +41,12 @@ nmap <yourkey> <Plug>(neomakemp_run_command)
 
 # Option
 
-Name                      | Description
-----                      | -----------
-g:neomakemp_grep_command  | `ag` or `grep`
-g:neomakemp_exclude_files | list variable,specify the ignore file
-g:neomakemp_exclude_dirs  | list variable,specify the ignore directory
+Name                         | Description
+----                         | -----------
+g:neomakemp_grep_command     | `ag` or `grep`
+g:neomakemp_exclude_files    | list variable,specify the ignore file
+g:neomakemp_exclude_dirs     | list variable,specify the ignore directory
+g:asyncrun_status(read only) | status of running command, add this to your statusline
 
 
 Config example:
@@ -62,6 +63,7 @@ Quickfix window will be opened under following condition:
 1. Global search
 2. Some error happened
 3. `flag` is equal to 1
+
 
 # Example
 
