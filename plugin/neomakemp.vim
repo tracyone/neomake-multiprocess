@@ -8,6 +8,8 @@ vnoremap <silent> <Plug>(neomakemp_global_search) :<c-u>:call neomakemp#global_s
 
 nnoremap <silent> <Plug>(neomakemp_run_command) :call neomakemp#run_command('')<cr>
 
+nnoremap <silent> <Plug>(neomakemp_global_search2) :call neomakemp#global_search('')<cr>
+
 "ag search for the word on current curosr
 nmap <Leader>vv <Plug>(neomakemp_global_search)
 
@@ -16,3 +18,6 @@ vmap <Leader>vv <Plug>(neomakemp_global_search)
 
 " run command which is from user input.
 nmap <Leader>vr <Plug>(neomakemp_run_command)
+
+"ag search for the word on current curosr
+nmap <Leader>vs <Plug>(neomakemp_global_search2)

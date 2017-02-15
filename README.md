@@ -31,12 +31,14 @@ Shortcut   | mode  | Description
 --------   | ----- | -----------
 `<Leader>vv` | visual,normal| global search selected word or under current curosr
 `<Leader>vr` | normal| run command from user input
+`<Leader>vs` | normal| global search from user input
 
 you can remap it:
 
 ```vim
 nmap <yourkey> <Plug>(neomakemp_global_search) 
 nmap <yourkey> <Plug>(neomakemp_run_command) 
+nmap <yourkey> <Plug>(neomakemp_global_search2) 
 ```
 
 # Option
