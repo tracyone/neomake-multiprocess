@@ -55,6 +55,7 @@ function! neomakemp#global_search(pattern) abort
     else
         let l:neomake_searchql=a:pattern
     endif
+    let l:neomake_searchql=escape(l:neomake_searchql,'->')
     let args = [s:arg_init]
     let exfile=""
     let exdir=""
