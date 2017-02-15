@@ -12,7 +12,7 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 # Usage
 
 ```vim
- neomakemp#run_command(command [, callback] [,arglist] [, flag)
+neomakemp#run_command(command [, callback] [,arglist] [, flag])
 ```
 
 Run `command` asynchronously.
