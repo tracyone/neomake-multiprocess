@@ -55,7 +55,11 @@ function! neomakemp#global_search(pattern) abort
     else
         let l:neomake_searchql=a:pattern
     endif
-    let l:neomake_searchql=escape(l:neomake_searchql,'->')
+    if g:neomakemp_grep_command ==# 'ag'
+        let l:neomake_searchql=escape(l:neomake_searchql,'->()')
+    else
+        let l:neomake_searchql=escape(l:neomake_searchql,'-')
+    endif
     let args = [s:arg_init]
     let exfile=""
     let exdir=""
