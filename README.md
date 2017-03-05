@@ -48,7 +48,6 @@ Name                         | Description
 g:neomakemp_grep_command     | `ag` or `grep`
 g:neomakemp_exclude_files    | list variable,specify the ignore file
 g:neomakemp_exclude_dirs     | list variable,specify the ignore directory
-g:asyncrun_status(read only) | status of running command, add this to your statusline
 
 
 Config example:
@@ -58,6 +57,9 @@ Config example:
 let g:neomakemp_grep_command = "ag"
 let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
 let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
+
+" Display process in vim-airline
+let g:airline_section_error = airline#section#create_right(['%{neomakemp#run_status()}'])
 ```
 
 Quickfix window will be opened under following condition:

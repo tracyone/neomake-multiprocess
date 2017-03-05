@@ -8,6 +8,8 @@ endif
 
 let g:neomakemp_job_list=[]
 
+let g:asyncrun_status = ''
+
 if g:neomakemp_grep_command ==# 'ag'
     let s:arg_exclude_file     = '--ignore='
     let s:arg_exclude_dir      = '--ignore='
@@ -135,9 +137,13 @@ function! neomakemp#on_neomake_finished() abort
     endif
 endfunction
 
+function! neomakemp#run_status()
+    return g:asyncrun_status
+endfunction
 
 "neomakemp#RunCommand (command [, callback] [,arglist] [, flag)
 function! neomakemp#run_command(command,...) abort
+    let g:asyncrun_status = ''
     let l:job_info={}
     let l:job_info.callback=''
     let l:job_info.args=[]
