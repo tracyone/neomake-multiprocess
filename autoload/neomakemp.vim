@@ -134,6 +134,15 @@ function! neomakemp#on_neomake_finished() abort
                     \ || needle.flags == 1
             :copen
         endif
+        if has('timers')
+            call timer_start(10000,'neomakemp#update_run_status')
+        endif
+    endif
+endfunction
+
+function! neomakemp#update_run_status(timer) abort
+    if len(g:neomakemp_job_list) == 0
+        let g:asyncrun_status=''
     endif
 endfunction
 
