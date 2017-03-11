@@ -1,8 +1,8 @@
 if !exists('g:neomakemp_grep_command')
     if executable('ag')
-        let g:neomakemp_grep_command = "ag"
+        let g:neomakemp_grep_command = 'ag'
     else
-        let g:neomakemp_grep_command = "grep"
+        let g:neomakemp_grep_command = 'grep'
     endif
 endif
 
@@ -21,21 +21,21 @@ elseif g:neomakemp_grep_command ==# 'grep'
     let s:arg_init = '-nRI'
     let s:error_format='%f:%l:%m,%f:%l%m,%f  %l%m'
 else
-    echom "Unsupport searcher"
+    echom 'Unsupport searcher'
     finish
 endif
 
 if !exists('g:neomakemp_exclude_files')
     let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
 elseif type(g:neomakemp_exclude_files) != v:t_list
-    echom "g:neomakemp_exclude_files must be a list variable"
+    echom 'g:neomakemp_exclude_files must be a list variable'
     finish
 endif
 
 if !exists('g:neomakemp_exclude_dirs')
     let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
 elseif type(g:neomakemp_exclude_dirs) != v:t_list
-    echom "g:neomakemp_exclude_dirs must be a list variable"
+    echom 'g:neomakemp_exclude_dirs must be a list variable'
     finish
 endif
 
@@ -45,7 +45,7 @@ function! neomakemp#entry_to_warning(entry) abort
   let a:entry.type = 'I'
 endfunction
 
-function! neomakemp#SampleCallBack(command)
+function! neomakemp#SampleCallBack(command) abort
     execute a:command
 endfunction
 
@@ -62,23 +62,23 @@ function! neomakemp#global_search(pattern) abort
     else
         let l:neomake_searchql=escape(l:neomake_searchql,'-')
     endif
-    let args = [s:arg_init]
-    let exfile=""
-    let exdir=""
+    let l:args = [s:arg_init]
+    let l:exfile=''
+    let l:exdir=''
     
-    for exfile in g:neomakemp_exclude_files
-        let args += [s:arg_exclude_file.exfile]
+    for l:exfile in g:neomakemp_exclude_files
+        let l:args += [s:arg_exclude_file.l:exfile]
     endfor
 
-    for exdir in g:neomakemp_exclude_dirs
-        let args += [s:arg_exclude_dir.exdir]
+    for l:exdir in g:neomakemp_exclude_dirs
+        let l:args += [s:arg_exclude_dir.l:exdir]
     endfor
 
-    let args += [l:neomake_searchql]
+    let l:args += [l:neomake_searchql]
 
     let l:neomake_tmp_maker = {
         \ 'exec': g:neomakemp_grep_command,
-        \ 'args': args,
+        \ 'args': l:args,
         \ 'errorformat': s:error_format,
         \ 'append_file': 0,
         \ 'postprocess': function('neomakemp#entry_to_warning')
@@ -102,22 +102,25 @@ endfunction
 
 function! neomakemp#on_neomake_finished() abort
     let l:i = 0
+    if len(g:neomakemp_job_list) == 0
+        return -1
+    endif
 
-    for needle in g:neomakemp_job_list
-        if needle.jobid == g:neomake_hook_context.jobinfo.id
-            if type(needle.callback) == v:t_string
-                if needle.callback !~ '^\s*$'
-                    let l:Callback = function(needle.callback)
+    for l:needle in g:neomakemp_job_list
+        if l:needle.jobid == g:neomake_hook_context.jobinfo.id
+            if type(l:needle.callback) == v:t_string
+                if l:needle.callback !~# '^\s*$'
+                    let l:Callback = function(l:needle.callback)
                 else
                     let l:Callback=''
                 endif
-            elseif type(needle.callback) == v:t_func
-                let l:Callback = needle.callback
+            elseif type(l:needle.callback) == v:t_func
+                let l:Callback = l:needle.callback
             else
                 let l:Callback=''
             endif
             try
-                call call(l:Callback, needle.args)
+                call call(l:Callback, l:needle.args)
             catch /^Vim\%((\a\+)\)\=:E117/
             endtry
             "echom 'remove '.g:neomakemp_job_list[l:i].jobid
@@ -131,7 +134,7 @@ function! neomakemp#on_neomake_finished() abort
     else
         let g:asyncrun_status='All Done'
         if g:neomake_hook_context.jobinfo.exit_code != 0 
-                    \ || needle.flags == 1
+                    \ || l:needle.flags == 1
             :copen
         endif
         if has('timers')
@@ -146,7 +149,7 @@ function! neomakemp#update_run_status(timer) abort
     endif
 endfunction
 
-function! neomakemp#run_status()
+function! neomakemp#run_status() abort
     return g:asyncrun_status
 endfunction
 
