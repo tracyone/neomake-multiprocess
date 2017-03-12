@@ -138,13 +138,13 @@ function! neomakemp#on_neomake_finished() abort
             :copen
         endif
         if has('timers')
-            call timer_start(10000,'neomakemp#update_run_status')
+            call timer_start(8000,'neomakemp#update_run_status')
         endif
     endif
 endfunction
 
 function! neomakemp#update_run_status(timer) abort
-    if len(g:neomakemp_job_list) == 0
+    if len(g:neomakemp_job_list) == 0 && a:timer > 0
         let g:asyncrun_status=''
     endif
 endfunction
