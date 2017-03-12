@@ -1,4 +1,4 @@
-# neomake-multiprocess
+# neomake-multiprocess [![Build Status](https://travis-ci.org/tracyone/neomakmp-multiprocess.svg?branch=master)](https://travis-ci.org/tracyone/neomakmp-multiprocess)
 
 A vim plugin for running multiple process asynchronously base on [neomake](https://github.com/neomake/neomake).
 
