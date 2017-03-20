@@ -30,6 +30,7 @@ Global search charactor containing a match to the given PATTERN.
 Shortcut   | mode  | Description
 --------   | ----- | -----------
 `<Leader>vv` | visual,normal| global search selected word or under current curosr
+`<Leader>vb` | visual,normal| searching through all existing buffers
 `<Leader>vr` | normal| run command from user input
 `<Leader>vs` | normal| global search from user input
 

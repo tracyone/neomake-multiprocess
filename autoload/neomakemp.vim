@@ -50,7 +50,7 @@ function! neomakemp#SampleCallBack(command) abort
 endfunction
 
 "neomakemp#global_search(pattern)
-function! neomakemp#global_search(pattern) abort
+function! neomakemp#global_search(pattern,...) abort
     let g:asyncrun_status = ''
     if a:pattern =~# '^\s*$'
         let l:neomake_searchql=input('Global Search: ')
@@ -75,6 +75,15 @@ function! neomakemp#global_search(pattern) abort
     endfor
 
     let l:args += [l:neomake_searchql]
+
+    "search in opend buffers
+    if a:0 == 1
+        if a:1 == 1
+            let l:bufname=[]
+            :silent bufdo call add(l:bufname,expand('%'))
+            let l:args+=l:bufname
+        endif
+    endif
 
     let l:neomake_tmp_maker = {
         \ 'exec': g:neomakemp_grep_command,
