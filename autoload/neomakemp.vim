@@ -65,6 +65,9 @@ function! neomakemp#global_search(pattern,...) abort
     else
         let l:neomake_searchql=a:pattern
     endif
+    if l:neomake_searchql =~# '^\s*$'
+        return 0
+    endif
     let l:flag=0x0
     if a:0 == 1
         let l:flag=a:1
