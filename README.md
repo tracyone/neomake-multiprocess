@@ -9,7 +9,7 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 
 # Screenshot
 
-[![video](https://asciinema.org/a/qG6U7Co4jgxD2VhseetUcIBWM.png)][https://asciinema.org/a/qG6U7Co4jgxD2VhseetUcIBWM]
+[![asciicast](https://asciinema.org/a/qG6U7Co4jgxD2VhseetUcIBWM.png)](https://asciinema.org/a/qG6U7Co4jgxD2VhseetUcIBWM)
 
 # Usage
 
