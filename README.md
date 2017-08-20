@@ -24,7 +24,10 @@ Run `command` asynchronously.
 - `flag` specify whether open quickfix window after command exited.
 
 ```vim
-neomakemp#global_search(pattern)
+"argument flag is bit base varabile
+"flag:0x01-->search in opened buffer
+"flag:0x02-->search original string
+neomakemp#global_search(pattern [, flag])
 ```
 
 Global search charactor containing a match to the given PATTERN.

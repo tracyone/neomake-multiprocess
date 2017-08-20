@@ -54,7 +54,10 @@ function! neomakemp#SampleCallBack(command) abort
     execute a:command
 endfunction
 
-"neomakemp#global_search(pattern)
+"neomakemp#global_search(pattern [, flag])
+"argument flag is bit base varabile
+"flag:0x01-->search in opened buffer
+"flag:0x02-->search original string
 function! neomakemp#global_search(pattern,...) abort
     let g:asyncrun_status = ''
     if a:pattern =~# '^\s*$'
@@ -62,11 +65,21 @@ function! neomakemp#global_search(pattern,...) abort
     else
         let l:neomake_searchql=a:pattern
     endif
-    if g:neomakemp_grep_command ==# 'ag' || g:neomakemp_grep_command ==# 'rg'
-        let l:neomake_searchql=escape(l:neomake_searchql,'->()')
-        "let l:neomake_searchql=escape(l:neomake_searchql,'\^$.*+?()[]{}|')
-    else
-        let l:neomake_searchql=escape(l:neomake_searchql,'-')
+    let l:flag=0x0
+    if a:0 == 1
+        let l:flag=a:1
+    endif
+    if type(l:flag) != v:t_number
+        echom 'Wrong argument! Option must be a number'
+        return -1
+    endif
+    if and(l:flag, 0x02)
+        if g:neomakemp_grep_command ==# 'ag' || g:neomakemp_grep_command ==# 'rg'
+            "let l:neomake_searchql=escape(l:neomake_searchql,'->()')
+            let l:neomake_searchql=escape(l:neomake_searchql,'\^$.*+?()[]{}|')
+        else
+            let l:neomake_searchql=escape(l:neomake_searchql,'-')
+        endif
     endif
     let l:args = []
     call extend(l:args, s:arg_init)
@@ -88,7 +101,7 @@ function! neomakemp#global_search(pattern,...) abort
     call add(l:args, l:neomake_searchql)
 
     "search in opend buffers
-    if a:0 == 1
+    if and(l:flag, 0x01)
         if a:1 == 1
             let l:bufname=[]
             :silent bufdo call add(l:bufname,expand('%'))
