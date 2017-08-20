@@ -1,5 +1,7 @@
 if !exists('g:neomakemp_grep_command')
-    if executable('ag')
+    if executable('rg')
+        let g:neomakemp_grep_command = 'rg'
+    elseif executable('ag')
         let g:neomakemp_grep_command = 'ag'
     else
         let g:neomakemp_grep_command = 'grep'
@@ -10,15 +12,18 @@ let g:neomakemp_job_list=[]
 
 let g:asyncrun_status = ''
 
-if g:neomakemp_grep_command ==# 'ag'
+if g:neomakemp_grep_command ==# 'rg'
+    let s:arg_init = ['-H', '--no-heading', '--vimgrep']
+    let s:error_format='%f:%l:%c:%m'
+elseif g:neomakemp_grep_command ==# 'ag'
     let s:arg_exclude_file     = '--ignore='
     let s:arg_exclude_dir      = '--ignore='
-    let s:arg_init = '--vimgrep'
+    let s:arg_init = ['--vimgrep']
     let s:error_format='%f:%l:%c:%m,%f:%l%m,%f  %l%m'
 elseif g:neomakemp_grep_command ==# 'grep'
     let s:arg_exclude_file     = '--exclude='
     let s:arg_exclude_dir      = '--exclude-dir='
-    let s:arg_init = '-nRI'
+    let s:arg_init = ['-nRI']
     let s:error_format='%f:%l:%m,%f:%l%m,%f  %l%m'
 else
     echom 'Unsupport searcher'
@@ -57,32 +62,40 @@ function! neomakemp#global_search(pattern,...) abort
     else
         let l:neomake_searchql=a:pattern
     endif
-    if g:neomakemp_grep_command ==# 'ag'
+    if g:neomakemp_grep_command ==# 'ag' || g:neomakemp_grep_command ==# 'rg'
         let l:neomake_searchql=escape(l:neomake_searchql,'->()')
+        "let l:neomake_searchql=escape(l:neomake_searchql,'\^$.*+?()[]{}|')
     else
         let l:neomake_searchql=escape(l:neomake_searchql,'-')
     endif
-    let l:args = [s:arg_init]
+    let l:args = []
+    call extend(l:args, s:arg_init)
     let l:exfile=''
     let l:exdir=''
     
-    for l:exfile in g:neomakemp_exclude_files
-        let l:args += [s:arg_exclude_file.l:exfile]
-    endfor
+    if exists('s:arg_exclude_file')
+        for l:exfile in g:neomakemp_exclude_files
+            let l:args += [s:arg_exclude_file.l:exfile]
+        endfor
+    endif
 
-    for l:exdir in g:neomakemp_exclude_dirs
-        let l:args += [s:arg_exclude_dir.l:exdir]
-    endfor
+    if exists('s:arg_exclude_dir')
+        for l:exdir in g:neomakemp_exclude_dirs
+            let l:args += [s:arg_exclude_dir.l:exdir]
+        endfor
+    endif
 
-    let l:args += [l:neomake_searchql]
+    call add(l:args, l:neomake_searchql)
 
     "search in opend buffers
     if a:0 == 1
         if a:1 == 1
             let l:bufname=[]
             :silent bufdo call add(l:bufname,expand('%'))
-            let l:args+=l:bufname
+            call extend(l:args, l:bufname)
         endif
+    else
+        call add(l:args, '.')
     endif
 
     let l:neomake_tmp_maker = {
@@ -92,7 +105,9 @@ function! neomakemp#global_search(pattern,...) abort
         \ 'append_file': 0,
         \ 'postprocess': function('neomakemp#entry_to_warning')
         \ }
-    if g:neomakemp_grep_command ==# 'ag'
+    if g:neomakemp_grep_command ==# 'rg'
+        let g:neomake_rg_maker=l:neomake_tmp_maker
+    elseif g:neomakemp_grep_command ==# 'ag'
         let g:neomake_ag_maker=l:neomake_tmp_maker
     else
         let g:neomake_grep_maker=l:neomake_tmp_maker
