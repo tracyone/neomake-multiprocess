@@ -198,7 +198,7 @@ function! neomakemp#run_command(command,...) abort
             let l:job_info.flags=s:needle
         else
             echom 'Wrong argument'
-            return 0
+            return -1 
         endif 
     endfor
 
@@ -207,6 +207,7 @@ function! neomakemp#run_command(command,...) abort
         call add(g:neomakemp_job_list, l:job_info)
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
     endif
+    return l:job_info.jobid
 endfunction
 
 augroup neomakemp
