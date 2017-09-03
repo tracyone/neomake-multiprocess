@@ -11,6 +11,15 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 
 [![asciicast](https://asciinema.org/a/qG6U7Co4jgxD2VhseetUcIBWM.png)](https://asciinema.org/a/qG6U7Co4jgxD2VhseetUcIBWM)
 
+# Installation
+
+Use [vim-plug](https://github.com/junegunn/vim-plug):
+
+```vim
+Plug 'neomake/neomake'
+Plug 'tracyone/neomake-multiprocess'
+```
+
 # Usage
 
 ```vim
