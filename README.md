@@ -2,6 +2,20 @@
 
 A vim plugin for running multiple process asynchronously base on [neomake](https://github.com/neomake/neomake).
 
+
+<!-- vim-markdown-toc GFM -->
+
+* [Feature](#feature)
+* [Screenshot](#screenshot)
+* [Installation](#installation)
+* [Usage](#usage)
+    * [Functions](#functions)
+    * [keymappings](#keymappings)
+    * [Option](#option)
+* [Example](#example)
+
+<!-- vim-markdown-toc -->
+
 # Feature
 
 1. Run multiple process asynchronously.
@@ -22,24 +36,31 @@ Plug 'tracyone/neomake-multiprocess'
 
 # Usage
 
+## Functions
+
 ```vim
 neomakemp#run_command(command [, callback] [,arglist] [, flag])
 ```
 
-Run `command` asynchronously.
+Run `command` asynchronously:
 
 - `callback` is a `Funcref` variable which will be called after `command` exit.
 - `arglist` is a `list` variable which will be passed to `callback`
 - `flag` specify whether open quickfix window after command exited.
 
+Global search charactor containing a match to the given PATTERN:
+
 ```vim
-"argument flag is bit base varabile
-"flag:0x01-->search in opened buffer
-"flag:0x02-->search original string
 neomakemp#global_search(pattern [, flag])
 ```
 
-Global search charactor containing a match to the given PATTERN.
+`flag` is bit base variable:
+
+- 0x01-->search in opened buffer
+- 0x02-->search original string
+
+
+## keymappings
 
 Shortcut   | mode  | Description
 --------   | ----- | -----------
@@ -51,12 +72,17 @@ Shortcut   | mode  | Description
 you can remap it:
 
 ```vim
+"search words on current cursor.
 nmap <yourkey> <Plug>(neomakemp_global_search) 
+"run commands from user input
 nmap <yourkey> <Plug>(neomakemp_run_command) 
+"search words from user input(regular expression)
 nmap <yourkey> <Plug>(neomakemp_global_search2) 
+"search word on current cursor in exist buffers
+nmap <yourkey> <Plug>(neomakemp_global_search_buf)
 ```
 
-# Option
+## Option
 
 Name                         | Description
 ----                         | -----------
@@ -68,8 +94,9 @@ g:neomakemp_exclude_dirs     | list variable,specify the ignore directory
 Config example:
 
 ```vim
-"following is default value
+"autodetect the existence of commands and select the faster one(rg > ag > grep)
 let g:neomakemp_grep_command = "ag"
+"following is default value
 let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
 let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
 
