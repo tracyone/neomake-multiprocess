@@ -13,25 +13,7 @@ CONTENTS                                                      *neomakemp-content
     4.4. Show running status in statusline.|neomakemp-show_running_status_in_statusline|
 5. Example.....................................................|neomakemp-example|
 
-** neomake-multiprocess** [](https://travis-ci.org/tracyone/neomake-multiprocess)
-
 A vim plugin for running multiple process asynchronously base on neomake (https://github.com/neomake/neomake).
->
-    <!-- vim-markdown-toc GFM -->
-<
-
-*   Feature (#feature)
-*   Screenshot (#screenshot)
-*   Installation (#installation)
-*   Usage (#usage)
-    *   Functions (#functions)
-    *   Keymappings (#keymappings)
-    *   Options (#options)
-    *   Show running status in statusline (#show-running-status-in-statusline)
-*   Example (#example)
->
-    <!-- vim-markdown-toc -->
-<
 
 ================================================================================
 FEATURE                                                        *neomakemp-feature*
