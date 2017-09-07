@@ -10,7 +10,7 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 * [Installation](#installation)
 * [Usage](#usage)
     * [Functions](#functions)
-    * [keymappings](#keymappings)
+    * [Keymappings](#keymappings)
     * [Option](#option)
 * [Example](#example)
 
@@ -18,8 +18,8 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 
 # Feature
 
-1. Run multiple process asynchronously.
-2. Global search asynchronously, support [ag](https://github.com/ggreer/the_silver_searcher), [rg](https://github.com/BurntSushi/ripgrep) and grep.
+1. Run multiple process asynchronously and output to quickfix window.
+2. Global search asynchronously, support [ag](https://github.com/ggreer/the_silver_searcher), [rg](https://github.com/BurntSushi/ripgrep) and grep, and output to quickfix window with `errorformat` option seted properly.
 
 # Screenshot
 
@@ -60,7 +60,7 @@ neomakemp#global_search(pattern [, flag])
 - 0x02-->search original string
 
 
-## keymappings
+## Keymappings
 
 Shortcut   | mode  | Description
 --------   | ----- | -----------
