@@ -1,4 +1,4 @@
-# neomake-multiprocess [![Build Status](https://travis-ci.org/tracyone/neomake-multiprocess.svg?branch=master)](https://travis-ci.org/tracyone/neomake-multiprocess)
+** neomake-multiprocess** [![Build Status](https://travis-ci.org/tracyone/neomake-multiprocess.svg?branch=master)](https://travis-ci.org/tracyone/neomake-multiprocess)
 
 A vim plugin for running multiple process asynchronously base on [neomake](https://github.com/neomake/neomake).
 
@@ -11,7 +11,8 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 * [Usage](#usage)
     * [Functions](#functions)
     * [Keymappings](#keymappings)
-    * [Option](#option)
+    * [Options](#options)
+    * [Show running status in statusline](#show-running-status-in-statusline)
 * [Example](#example)
 
 <!-- vim-markdown-toc -->
@@ -35,6 +36,11 @@ Plug 'tracyone/neomake-multiprocess'
 ```
 
 # Usage
+
+
+```vim
+:h neomakemp.txt
+```
 
 ## Functions
 
@@ -82,7 +88,7 @@ nmap <yourkey> <Plug>(neomakemp_global_search2)
 nmap <yourkey> <Plug>(neomakemp_global_search_buf)
 ```
 
-## Option
+## Options
 
 Name                         | Description
 ----                         | -----------
@@ -100,8 +106,6 @@ let g:neomakemp_grep_command = "ag"
 let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
 let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
 
-" Display process in vim-airline
-let g:airline_section_error = airline#section#create_right(['%{neomakemp#run_status()}'])
 ```
 
 Quickfix window will be opened under following condition:
@@ -110,6 +114,17 @@ Quickfix window will be opened under following condition:
 2. Some error happened
 3. `flag` is equal to 1
 
+## Show running status in statusline
+
+**Display running status of commands in [vim-airline](https://github.com/vim-airline/vim-airline)**
+
+```vim
+let g:airline_section_error = airline#section#create_right(['%{neomakemp#run_status()}'])
+```
+
+```vim
+let statusline.=neomakemp#run_status()
+```
 
 # Example
 
