@@ -1,4 +1,4 @@
-neomakemp.txt                       *neomake* *neomake-multiprocess* *neomakemp*
+neomakemp.txt                                 *neomakemp* *neomake-multiprocess*
 
 ================================================================================
 CONTENTS                                                      *neomakemp-contents*
