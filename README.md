@@ -116,11 +116,13 @@ Quickfix window will be opened under following condition:
 
 ## Show running status in statusline
 
-**Display running status of commands in [vim-airline](https://github.com/vim-airline/vim-airline)**
+**Display running status of commands in [vim-airline](https://github.com/vim-airline/vim-airline):**
 
 ```vim
 let g:airline_section_error = airline#section#create_right(['%{neomakemp#run_status()}'])
 ```
+
+Display running status in vim's buildin statusline:
 
 ```vim
 let statusline.=neomakemp#run_status()

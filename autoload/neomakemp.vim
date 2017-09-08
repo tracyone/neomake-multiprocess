@@ -58,8 +58,8 @@ endfunction
 "flag:0x01-->search in opened buffer
 "flag:0x02-->search original string
 function! neomakemp#global_search(pattern,...) abort
-    if g:neomakemp_grep_command ==# ''
-        echom 'grepper command not found! Please install pg, ag or grep.'
+    if !executable(g:neomakemp_grep_command)
+        echom 'Grepper command '.g:neomakemp_grep_command.' not found! Please install pg, ag or grep.'
         return -1
     endif
     let g:asyncrun_status = ''
