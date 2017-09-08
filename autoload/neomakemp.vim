@@ -3,8 +3,10 @@ if !exists('g:neomakemp_grep_command')
         let g:neomakemp_grep_command = 'rg'
     elseif executable('ag')
         let g:neomakemp_grep_command = 'ag'
-    else
+    elseif executable('grep')
         let g:neomakemp_grep_command = 'grep'
+    else
+        let g:neomakemp_grep_command = ''
     endif
 endif
 
@@ -25,9 +27,6 @@ elseif g:neomakemp_grep_command ==# 'grep'
     let s:arg_exclude_dir      = '--exclude-dir='
     let s:arg_init = ['-nRI']
     let s:error_format='%f:%l:%m,%f:%l%m,%f  %l%m'
-else
-    echom 'Unsupport searcher'
-    finish
 endif
 
 if !exists('g:neomakemp_exclude_files')
@@ -59,6 +58,10 @@ endfunction
 "flag:0x01-->search in opened buffer
 "flag:0x02-->search original string
 function! neomakemp#global_search(pattern,...) abort
+    if g:neomakemp_grep_command ==# ''
+        echom 'grepper command not found! Please install pg, ag or grep.'
+        return -1
+    endif
     let g:asyncrun_status = ''
     if a:pattern =~# '^\s*$'
         let l:neomake_searchql=input('Global Search: ')
