@@ -166,7 +166,7 @@ function! neomakemp#on_neomake_finished() abort
                 call call(l:Callback, l:needle.args)
             catch /^Vim\%((\a\+)\)\=:E117/
             endtry
-            execute 'echohl WarningMsg' | echom l:needle.name.' return '.g:neomake_hook_context.jobinfo.exit_code | echohl None
+            execute 'echohl WarningMsg' | echom l:needle.name.' [ return '.g:neomake_hook_context.jobinfo.exit_code.' ]' | echohl None
             "echom 'remove '.g:neomakemp_job_list[l:i].jobid
             call remove(g:neomakemp_job_list, l:i)
             break
