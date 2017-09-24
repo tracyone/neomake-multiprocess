@@ -136,8 +136,8 @@ function! neomakemp#global_search(pattern,...) abort
     let l:job_info.callback=''
     let l:job_info.args=[]
     let l:job_info.flags=1
+    let l:job_info.name=l:neomake_tmp_maker.exec
     if l:job_info.jobid != -1
-
         call add(g:neomakemp_job_list, l:job_info)
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
     endif
@@ -166,6 +166,7 @@ function! neomakemp#on_neomake_finished() abort
                 call call(l:Callback, l:needle.args)
             catch /^Vim\%((\a\+)\)\=:E117/
             endtry
+            execute 'echohl WarningMsg' | echom l:needle.name.' return '.g:neomake_hook_context.jobinfo.exit_code | echohl None
             "echom 'remove '.g:neomakemp_job_list[l:i].jobid
             call remove(g:neomakemp_job_list, l:i)
             break
@@ -204,9 +205,12 @@ function! neomakemp#run_command(command,...) abort
     let l:job_info.args=[]
     let l:job_info.flags=0
     if a:command =~# '^\s*$'
-        let l:command=input('Run command: ')
+        let l:job_info.name=input('Run command: ')
     else
-        let l:command=a:command
+        let l:job_info.name=a:command
+    endif
+    if l:job_info.name =~# '^\s*$'
+        return 0
     endif
     for s:needle in a:000
         if type(s:needle) == v:t_func
@@ -221,7 +225,7 @@ function! neomakemp#run_command(command,...) abort
         endif 
     endfor
 
-    let l:job_info.jobid=neomake#Sh(l:command)
+    let l:job_info.jobid=neomake#Sh(l:job_info.name)
     if l:job_info.jobid != -1
         call add(g:neomakemp_job_list, l:job_info)
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
