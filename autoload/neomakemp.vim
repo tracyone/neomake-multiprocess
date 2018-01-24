@@ -169,6 +169,10 @@ function! neomakemp#on_neomake_finished() abort
             execute 'echohl WarningMsg' | echom l:needle.name.' [ return '.g:neomake_hook_context.jobinfo.exit_code.' ]' | echohl None
             "echom 'remove '.g:neomakemp_job_list[l:i].jobid
             call remove(g:neomakemp_job_list, l:i)
+            if g:neomake_hook_context.jobinfo.exit_code != 0 
+                        \ || l:needle.flags == 1
+                :copen
+            endif
             break
         endif
         let l:i += 1
@@ -177,10 +181,6 @@ function! neomakemp#on_neomake_finished() abort
         let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
     else
         let g:asyncrun_status='All Done'
-        if g:neomake_hook_context.jobinfo.exit_code != 0 
-                    \ || l:needle.flags == 1
-            :copen
-        endif
         if has('timers')
             call timer_start(8000,'neomakemp#update_run_status')
         endif
