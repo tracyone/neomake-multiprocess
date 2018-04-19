@@ -110,7 +110,14 @@ function! neomakemp#global_search(pattern,...) abort
     if and(l:flag, 0x01)
         if a:1 == 1
             let l:bufname=[]
-            :silent bufdo call add(l:bufname,expand('%'))
+            let l:last_buffer = bufnr('$')
+            let l:n = 1
+            while l:n <= l:last_buffer
+                if buflisted(l:n)
+                    :silent call insert(l:bufname,bufname(l:n))
+                endif
+                let l:n = l:n+1
+            endwhile
             call extend(l:args, l:bufname)
         endif
     else
