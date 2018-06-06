@@ -14,6 +14,7 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
     * [Options](#options)
     * [Show running status in statusline](#show-running-status-in-statusline)
 * [Example](#example)
+* [Buy me a coffee](#buy-me-a-coffee)
 
 <!-- vim-markdown-toc -->
 
@@ -153,3 +154,7 @@ endfunction
 let l:gen_cscope_files='find ' .a:dir. ' -name "*.[chsS]" > '  . l:cscopefiles
 call neomakemp#RunCommand(l:gen_cscope_files.'&&cscope -Rbkq -i '.l:cscopefiles, function('<SID>AddCscopeOut'),[0,a:dir])
 ```
+
+# Buy me a coffee
+
+![donation](https://cloud.githubusercontent.com/assets/4246425/24827592/553bc732-1c7f-11e7-8207-284cccbc2e5c.jpg)
