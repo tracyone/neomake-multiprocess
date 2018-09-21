@@ -21,7 +21,7 @@ A vim plugin for running multiple process asynchronously base on [neomake](https
 # Feature
 
 1. Run multiple process asynchronously and output to quickfix window.
-2. Global search asynchronously, support [ag](https://github.com/ggreer/the_silver_searcher), [rg](https://github.com/BurntSushi/ripgrep) and grep, and output to quickfix window with `errorformat` option seted properly.
+2. Global search asynchronously, support [ag](https://github.com/ggreer/the_silver_searcher), [rg](https://github.com/BurntSushi/ripgrep), grep and git grep, and output to quickfix window with `errorformat` option seted properly.
 
 # Screenshot
 
@@ -93,7 +93,7 @@ nmap <yourkey> <Plug>(neomakemp_global_search_buf)
 
 Name                         | Description
 ----                         | -----------
-g:neomakemp_grep_command     | `rg`, `ag` or `grep`
+g:neomakemp_grep_command     | `rg`, `ag` , `grep` or `git`
 g:neomakemp_exclude_files    | list variable,specify the ignore file
 g:neomakemp_exclude_dirs     | list variable,specify the ignore directory
 
