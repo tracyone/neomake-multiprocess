@@ -5,6 +5,8 @@ if !exists('g:neomakemp_grep_command')
         let g:neomakemp_grep_command = 'ag'
     elseif executable('grep')
         let g:neomakemp_grep_command = 'grep'
+    elseif executable('git')
+        let g:neomakemp_grep_command = 'git'
     else
         let g:neomakemp_grep_command = ''
     endif
@@ -27,6 +29,9 @@ elseif g:neomakemp_grep_command ==# 'grep'
     let s:arg_exclude_dir      = '--exclude-dir='
     let s:arg_init = ['-nRI']
     let s:error_format='%f:%l:%m,%f:%l%m,%f  %l%m'
+elseif g:neomakemp_grep_command ==# 'git'
+    let s:arg_init = ['grep', '-E', '-n']
+    let s:error_format='%f:%l:%m'
 endif
 
 if !exists('g:neomakemp_exclude_files')
@@ -59,7 +64,7 @@ endfunction
 "flag:0x02-->search original string
 function! neomakemp#global_search(pattern,...) abort
     if !executable(g:neomakemp_grep_command)
-        echom 'Grepper command '.g:neomakemp_grep_command.' not found! Please install pg, ag or grep.'
+        echom 'Grepper command '.g:neomakemp_grep_command.' not found! Please install pg, ag or grep or git.'
         return -1
     endif
     let g:asyncrun_status = ''
@@ -135,8 +140,10 @@ function! neomakemp#global_search(pattern,...) abort
         let g:neomake_rg_maker=l:neomake_tmp_maker
     elseif g:neomakemp_grep_command ==# 'ag'
         let g:neomake_ag_maker=l:neomake_tmp_maker
-    else
+    elseif g:neomakemp_grep_command ==# 'grep'
         let g:neomake_grep_maker=l:neomake_tmp_maker
+    elseif g:neomakemp_grep_command ==# 'git'
+        let g:neomake_git_maker=l:neomake_tmp_maker
     endif
     let l:job_info={}
     let l:job_info.jobid = neomake#Make(0, [g:neomakemp_grep_command])[0]
