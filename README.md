@@ -73,6 +73,7 @@ Shortcut   | mode  | Description
 --------   | ----- | -----------
 `<Leader>vv` | visual,normal| global search selected word or under current curosr
 `<Leader>vb` | visual,normal| searching through all existing buffers
+`<Leader>vg` | visual,normal| searching in current file
 `<Leader>vr` | normal| run command from user input
 `<Leader>vs` | normal| global search from user input
 
@@ -87,6 +88,8 @@ nmap <yourkey> <Plug>(neomakemp_run_command)
 nmap <yourkey> <Plug>(neomakemp_global_search2) 
 "search word on current cursor in exist buffers
 nmap <yourkey> <Plug>(neomakemp_global_search_buf)
+"search word in current file
+nmap <yourkey> <Plug>(neomakemp_global_search_cur_file)
 ```
 
 ## Options

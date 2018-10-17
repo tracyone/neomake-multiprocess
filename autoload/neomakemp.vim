@@ -62,6 +62,7 @@ endfunction
 "argument flag is bit base varabile
 "flag:0x01-->search in opened buffer
 "flag:0x02-->search original string
+"flag:0x04-->search in current file
 function! neomakemp#global_search(pattern,...) abort
     if !executable(g:neomakemp_grep_command)
         echom 'Grepper command '.g:neomakemp_grep_command.' not found! Please install pg, ag or grep or git.'
@@ -125,6 +126,8 @@ function! neomakemp#global_search(pattern,...) abort
             endwhile
             call extend(l:args, l:bufname)
         endif
+    elseif and(l:flag, 0x04)
+        call add(l:args, expand('%:p'))
     else
         call add(l:args, '.')
     endif

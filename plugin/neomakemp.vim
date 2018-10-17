@@ -20,6 +20,12 @@ nnoremap <silent> <Plug>(neomakemp_global_search_buf) :call neomakemp#global_sea
 "search selected words in exist buffers
 vnoremap <silent> <Plug>(neomakemp_global_search_buf) :call neomakemp#global_search(getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1],0x1)<cr>
 
+"search selected words in current file
+nnoremap <silent> <Plug>(neomakemp_global_search_cur_file) :call neomakemp#global_search('\b'.expand("<cword>").'\b',0x4)<cr>
+vnoremap <silent> <Plug>(neomakemp_global_search_cur_file) :call neomakemp#global_search(getline("'<")[getpos("'<")[2]-1:getpos("'>")[2]-1],0x4)<cr>
+nmap <Leader>vg <Plug>(neomakemp_global_search_cur_file)
+vmap <Leader>vg <Plug>(neomakemp_global_search_cur_file)
+
 "ag global recursive search for the word on current curosr
 nmap <Leader>vv <Plug>(neomakemp_global_search)
 
