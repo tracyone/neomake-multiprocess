@@ -160,6 +160,68 @@ function! neomakemp#global_search(pattern,...) abort
     endif
 endfunction
 
+let s:win_list=[]
+
+function! neomakemp#close_floating_win(timer) abort
+    call timer_info(a:timer)
+    let l:flag=0
+    try
+        call nvim_win_close(s:win_list[0], v:true)
+    catch
+        call remove(s:win_list, 0)
+        let l:flag=1
+    endtry
+    if !empty(s:win_list) && l:flag == 0
+        call remove(s:win_list, 0)
+    endif
+endfunction
+
+function! neomakemp#EchoWarning(str,...) abort
+    let l:level='WarningMsg'
+    let l:prompt='neomakemp'
+    let l:flag=0
+    if a:0 != 0
+        for s:needle in a:000
+            if type(s:needle) == g:t_string
+                if s:needle ==? 'err'
+                    let l:level='ErrorMsg'
+                elseif s:needle ==? 'warn'
+                    let l:level='WarningMsg'
+                elseif s:needle ==? 'info'
+                    let l:level='None'
+                endif
+            elseif type(s:needle) == g:t_number
+                let l:flag=s:needle
+            endif
+        endfor
+    endif
+    if l:flag != 0 || has('vim_starting')
+        call add(s:global_echo_str, a:str)
+        return
+    endif
+    if has('nvim') && exists('*nvim_open_win') && exists('*nvim_win_set_config')
+        let l:str='['.l:prompt.'] '.a:str
+        let l:bufnr = nvim_create_buf(v:false, v:false)
+        let l:opts = {'relative': 'editor', 'width': strlen(l:str)+3, 'height': 1, 'col': &columns,
+                    \ 'row': len(s:win_list), 'anchor': 'NW'}
+        let l:win=nvim_open_win(l:bufnr, v:false,l:opts)
+        call nvim_buf_set_lines(l:bufnr, 0, -1, v:false, [l:str])
+        hi def NvimFloatingWindow  term=None guifg=black guibg=#f94e3e ctermfg=black ctermbg=210
+        call nvim_win_set_option(l:win, 'winhl', 'Normal:NvimFloatingWindow')
+        call nvim_win_set_option(l:win, 'number', v:false)
+        call nvim_win_set_option(l:win, 'relativenumber', v:false)
+        call nvim_buf_set_option(l:bufnr, 'buftype', 'nofile')
+        call nvim_buf_set_option(l:bufnr, 'bufhidden', 'wipe')
+        call nvim_buf_set_option(l:bufnr, 'modified', v:false)
+        call nvim_buf_set_option(l:bufnr, 'buflisted', v:false)
+        call add(s:win_list, l:win)
+        call timer_start(5000, 'neomakemp#close_floating_win', {'repeat': 1})
+    else
+        redraw!
+        execut 'echohl '.l:level | echom '['.l:prompt.'] '.a:str | echohl None
+    endif
+endfunction
+
 function! neomakemp#on_neomake_finished() abort
     let l:i = 0
     if len(g:neomakemp_job_list) == 0
@@ -183,7 +245,7 @@ function! neomakemp#on_neomake_finished() abort
                 call call(l:Callback, l:needle.args)
             catch /^Vim\%((\a\+)\)\=:E117/
             endtry
-            execute 'echohl WarningMsg' | echom l:needle.name.' [ return '.g:neomake_hook_context.jobinfo.exit_code.' ]' | echohl None
+            call neomakemp#EchoWarning(l:needle.name.' [ return '.g:neomake_hook_context.jobinfo.exit_code.' ]')
             "echom 'remove '.g:neomakemp_job_list[l:i].jobid
             call remove(g:neomakemp_job_list, l:i)
             if g:neomake_hook_context.jobinfo.exit_code != 0 
