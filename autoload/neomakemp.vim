@@ -177,7 +177,7 @@ function! neomakemp#close_floating_win(timer) abort
 endfunction
 
 function! neomakemp#vim_close_popup(winid, result) abort
-    if !empty(s:win_list) && a:winid == s:win_list[0]
+    if !empty(s:win_list) && a:winid == s:win_list[0].id
         call remove(s:win_list, 0)
     endif
 endfunction
@@ -224,16 +224,34 @@ function! neomakemp#EchoWarning(str,...) abort
         call timer_start(5000, 'neomakemp#close_floating_win', {'repeat': 1})
     elseif exists('*popup_create')
         let l:str='['.l:prompt.'] '.a:str
-			let l:win = popup_create(l:str, {
-				\ 'line': &lines-4-len(s:win_list)*3,
-				\ 'col': &columns-strlen(l:str)-3,
-				\ 'time': 5000,
-				\ 'tab': -1,
-				\ 'zindex': 200,
-				\ 'highlight': l:level,
-				\ 'border': [],
-				\ 'callback': 'neomakemp#vim_close_popup',
-				\ })
+        let l:win={}
+        if strlen(l:str) > (&columns/3)
+            let l:str_len = &columns/3
+            let l:win.str_width = strlen(l:str) / (&columns/3)
+            if (strlen(l:str) % (&columns/3)) != 0
+                let l:win.str_width += 1
+            endif
+        else
+            let l:str_len = strlen(l:str)
+            let l:win.str_width = 1
+        endif
+        if empty(s:win_list)
+            let l:win.line=&lines-1-(l:win.str_width+2)
+        else
+            let l:win.line=s:win_list[-1].line - (2+l:win.str_width)
+        endif
+        echom "line:"l:win.line." width:"l:win.str_width
+        let l:win.id = popup_create(l:str, {
+                    \ 'line': l:win.line,
+                    \ 'col': &columns-l:str_len-3,
+                    \ 'time': 5000,
+                    \ 'tab': -1,
+                    \ 'zindex': 200,
+                    \ 'highlight': l:level,
+                    \ 'maxwidth': &columns/3,
+                    \ 'border': [],
+                    \ 'callback': 'neomakemp#vim_close_popup',
+                    \ })
         call add(s:win_list, l:win)
     else
         redraw!
