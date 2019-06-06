@@ -37,14 +37,14 @@ endif
 if !exists('g:neomakemp_exclude_files')
     let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
 elseif type(g:neomakemp_exclude_files) != v:t_list
-    echom 'g:neomakemp_exclude_files must be a list variable'
+    call neomakemp#EchoWarning('g:neomakemp_exclude_files must be a list variable','err')
     finish
 endif
 
 if !exists('g:neomakemp_exclude_dirs')
     let g:neomakemp_exclude_dirs=[ '.git', 'bin', 'log', 'build', 'node_modules', '.bundle', '.tmp','.svn' ]
 elseif type(g:neomakemp_exclude_dirs) != v:t_list
-    echom 'g:neomakemp_exclude_dirs must be a list variable'
+    call neomakemp#EchoWarning('g:neomakemp_exclude_dirs must be a list variable', 'err')
     finish
 endif
 
@@ -65,7 +65,7 @@ endfunction
 "flag:0x04-->search in current file
 function! neomakemp#global_search(pattern,...) abort
     if !executable(g:neomakemp_grep_command)
-        echom 'Grepper command '.g:neomakemp_grep_command.' not found! Please install pg, ag or grep or git.'
+        call neomakemp#EchoWarning('Grepper command '.g:neomakemp_grep_command.' not found! Please install pg, ag or grep or git.', 'err')
         return -1
     endif
     let g:asyncrun_status = ''
@@ -82,7 +82,7 @@ function! neomakemp#global_search(pattern,...) abort
         let l:flag=a:1
     endif
     if type(l:flag) != v:t_number
-        echom 'Wrong argument! Option must be a number'
+        call neomakemp#EchoWarning('Wrong argument! Option must be a number', 'err')
         return -1
     endif
     if and(l:flag, 0x02)
@@ -177,8 +177,12 @@ function! neomakemp#close_floating_win(timer) abort
 endfunction
 
 function! neomakemp#vim_close_popup(winid, result) abort
-    if !empty(s:win_list) && a:winid == s:win_list[0].id
-        call remove(s:win_list, 0)
+    if !empty(s:win_list)
+        if a:winid == s:win_list[0].id
+            call remove(s:win_list, 0)
+        else
+            let s:win_list=[]
+        endif
     endif
 endfunction
 
@@ -240,7 +244,6 @@ function! neomakemp#EchoWarning(str,...) abort
         else
             let l:win.line=s:win_list[-1].line - (2+l:win.str_width)
         endif
-        echom "line:"l:win.line." width:"l:win.str_width
         let l:win.id = popup_create(l:str, {
                     \ 'line': l:win.line,
                     \ 'col': &columns-l:str_len-3,
@@ -336,7 +339,7 @@ function! neomakemp#run_command(command,...) abort
         elseif type(s:needle) == v:t_number
             let l:job_info.flags=s:needle
         else
-            echom 'Wrong argument'
+            call neomakemp#EchoWarning('Wrong argument', 'err')
             return -1 
         endif 
     endfor
