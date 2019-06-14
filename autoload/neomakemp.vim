@@ -269,6 +269,8 @@ function! neomakemp#EchoWarning(str,...) abort
                     \ 'highlight': l:level,
                     \ 'maxwidth': &columns/3,
                     \ 'border': [],
+                    \ 'borderchars':['-', '|', '-', '|', '+', '+', '+', '+'],
+                    \ 'drag': 1,
                     \ 'callback': 'neomakemp#vim_close_popup',
                     \ })
         call add(s:win_list, l:win)
