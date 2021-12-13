@@ -186,19 +186,23 @@ function! neomakemp#vim_close_popup(winid, result) abort
     endif
 endfunction
 
+hi def neomakemp_warn cterm=bold ctermfg=121 gui=bold guifg=#fabd2f
+hi def neomakemp_info cterm=bold ctermfg=118 gui=bold guifg=#A6E22E
+hi def neomakemp_border cterm=bold ctermfg=118 gui=bold guifg=#665c54
+
 function! neomakemp#EchoWarning(str,...) abort
-    let l:level='WarningMsg'
-    let l:prompt='neomakemp'
+    let l:level='vinux_warn'
+    let l:prompt=' '
     let l:flag=0
     if a:0 != 0
         for s:needle in a:000
             if type(s:needle) == g:t_string
                 if s:needle ==? 'err'
-                    let l:level='ErrorMsg'
-                elseif s:needle ==? 'warn'
                     let l:level='WarningMsg'
+                elseif s:needle ==? 'warn'
+                    let l:level='vinux_warn'
                 elseif s:needle ==? 'info'
-                    let l:level='None'
+                    let l:level='vinux_info'
                 endif
             elseif type(s:needle) == g:t_number
                 let l:flag=s:needle
@@ -210,7 +214,7 @@ function! neomakemp#EchoWarning(str,...) abort
         return
     endif
     if has('nvim') && exists('*nvim_open_win') && exists('*nvim_win_set_config')
-        let l:str='['.l:prompt.'] '.a:str
+        let l:str=l:prompt.a:str
         let l:win={}
         let l:bufnr = nvim_create_buf(v:false, v:false)
         if strlen(l:str) > (&columns/3)
@@ -232,14 +236,14 @@ function! neomakemp#EchoWarning(str,...) abort
                     \ 'row': l:win.line, 'anchor': 'NW', 'border': 'single', 'style': 'minimal'}
         let l:win.id=nvim_open_win(l:bufnr, v:false,l:opts)
         call nvim_buf_set_lines(l:bufnr, 0, -1, v:false, [l:str])
-        call nvim_win_set_option(l:win.id, 'winhl', 'Normal:'.l:level)
+        call nvim_win_set_option(l:win.id, 'winhl', 'Normal:'.l:level.',FloatBorder:neomakemp_border')
         call nvim_buf_set_option(l:bufnr, 'buftype', 'nofile')
         call nvim_buf_set_option(l:bufnr, 'bufhidden', 'wipe')
         call nvim_win_set_option(l:win.id, 'winblend', 30)
         call add(s:win_list, l:win)
         call timer_start(5000, 'neomakemp#close_floating_win', {'repeat': 1})
     elseif exists('*popup_create')
-        let l:str='['.l:prompt.'] '.a:str
+        let l:str=l:prompt.a:str
         let l:win={}
         if strlen(l:str) > (&columns/3)
             let l:str_len = &columns/3
@@ -265,14 +269,15 @@ function! neomakemp#EchoWarning(str,...) abort
                     \ 'highlight': l:level,
                     \ 'maxwidth': &columns/3,
                     \ 'border': [],
-                    \ 'borderchars':['-', '|', '-', '|', '+', '+', '+', '+'],
+                    \ 'borderchars':['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+                    \ 'borderhighlight':['neomakmp_border'],
                     \ 'drag': 1,
                     \ 'callback': 'neomakemp#vim_close_popup',
                     \ })
         call add(s:win_list, l:win)
     else
         redraw!
-        execut 'echohl '.l:level | echom '['.l:prompt.'] '.a:str | echohl None
+        execut 'echohl '.l:level | echom l:prompt.a:str | echohl None
     endif
 endfunction
 
