@@ -270,7 +270,7 @@ function! neomakemp#EchoWarning(str,...) abort
                     \ 'maxwidth': &columns/3,
                     \ 'border': [],
                     \ 'borderchars':['─', '│', '─', '│', '┌', '┐', '┘', '└'],
-                    \ 'borderhighlight':['neomakmp_border'],
+                    \ 'borderhighlight':['neomakemp_border'],
                     \ 'drag': 1,
                     \ 'callback': 'neomakemp#vim_close_popup',
                     \ })
