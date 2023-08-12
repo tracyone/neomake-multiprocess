@@ -19,6 +19,7 @@ let g:asyncrun_status = ''
 if g:neomakemp_grep_command ==# 'rg'
     let s:arg_init = ['-H', '--no-heading', '--vimgrep']
     let s:error_format='%f:%l:%c:%m'
+    let s:arg_exclude_file     = "-g"."!"
 elseif g:neomakemp_grep_command ==# 'ag'
     let s:arg_exclude_file     = '--ignore='
     let s:arg_exclude_dir      = '--ignore='
@@ -35,7 +36,7 @@ elseif g:neomakemp_grep_command ==# 'git'
 endif
 
 if !exists('g:neomakemp_exclude_files')
-    let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o']
+    let g:neomakemp_exclude_files=['*.jpg', '*.png', '*.min.js', '*.swp', '*.pyc','*.out','*.o', 'tags', 'cscope.files']
 elseif type(g:neomakemp_exclude_files) != v:t_list
     call neomakemp#EchoWarning('g:neomakemp_exclude_files must be a list variable','err')
     finish
