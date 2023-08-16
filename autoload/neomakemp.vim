@@ -178,13 +178,13 @@ function! neomakemp#close_floating_win(timer) abort
 endfunction
 
 function! neomakemp#vim_close_popup(winid, result) abort
-    if !empty(s:win_list)
-        if a:winid == s:win_list[0].id
-            call remove(s:win_list, 0)
-        else
-            let s:win_list=[]
+    let l:index = 0
+    for l:win in s:win_list
+        if l:win.id == a:winid
+            call remove(s:win_list, l:index)
         endif
-    endif
+        let l:index += 1
+    endfor
 endfunction
 
 hi def neomakemp_warn cterm=bold ctermfg=121 gui=bold guifg=#fabd2f
