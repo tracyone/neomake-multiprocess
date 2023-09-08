@@ -157,7 +157,7 @@ function! neomakemp#global_search(pattern,...) abort
     let l:job_info.name=l:neomake_tmp_maker.exec
     if l:job_info.jobid != -1
         call add(g:neomakemp_job_list, l:job_info)
-        let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
+        let g:asyncrun_status='Running:'.len(neomake#GetJobs())
     endif
 endfunction
 
@@ -320,9 +320,10 @@ function! neomakemp#on_neomake_finished() abort
         endif
         let l:i += 1
     endfor
-    if len(g:neomakemp_job_list) != 0
-        let g:asyncrun_status='Running:'.len(g:neomakemp_job_list)
+    if len(neomake#GetJobs()) != 0
+        let g:asyncrun_status='Running:'.len(neomake#GetJobs())
     else
+        let g:neomakemp_job_list = []
         let g:asyncrun_status='All Done'
         if has('timers')
             call timer_start(8000,'neomakemp#update_run_status')
@@ -331,7 +332,8 @@ function! neomakemp#on_neomake_finished() abort
 endfunction
 
 function! neomakemp#update_run_status(timer) abort
-    if len(g:neomakemp_job_list) == 0 && a:timer > 0
+    if len(neomake#GetJobs()) == 0 && a:timer > 0
+        let g:neomakemp_job_list = []
         let g:asyncrun_status=''
     endif
 endfunction
