@@ -312,8 +312,7 @@ function! neomakemp#on_neomake_finished() abort
             endif
             "echom 'remove '.g:neomakemp_job_list[l:i].jobid
             call remove(g:neomakemp_job_list, l:i)
-            if g:neomake_hook_context.jobinfo.exit_code != 0 
-                        \ || l:needle.flags == 1
+            if l:needle.flags == 1
                 :botright copen
             endif
             break
